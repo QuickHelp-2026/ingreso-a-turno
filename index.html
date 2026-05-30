@@ -825,8 +825,8 @@ function sendReport(){
   const h=now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   const f=now.toLocaleDateString('es-CO');
 
-  /* ══ AQUÍ CONECTAS CON TU APPS SCRIPT ══
-  fetch('TU_URL_APPS_SCRIPT_AQUI',{
+
+  fetch('https://script.google.com/macros/s/AKfycbxBlUhPEUoVF4ClQJcvJhiHHIEyvimr-R7ZitWCBjWBHhMke155Io8xy88lIW20WNuX/exec',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
@@ -836,7 +836,7 @@ function sendReport(){
       foto:captured
     })
   });
-  */
+
 
   document.getElementById('screen-form').style.display='none';
   document.getElementById('screen-success').style.display='flex';
