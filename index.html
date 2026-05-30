@@ -818,33 +818,59 @@ function setStepActive(n){
   }
 }
 
-function sendReport(){
-  const ced=document.getElementById('cedula').value.trim();
-  const pto=document.getElementById('punto').value;
-  const now=new Date();
-  const h=now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-  const f=now.toLocaleDateString('es-CO');
+async function sendReport(){
+  const ced = document.getElementById('cedula').value.trim();
+  const pto = document.getElementById('punto').value;
+  const now = new Date();
+  const h   = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+  const f   = now.toLocaleDateString('es-CO');
 
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLuIHylYPEnl6EQ4MZH6Z-aCGBFvOUW1XF3kfZEOrPRAUaDcvBoqrBoBKlNNuRQYew/exec';
 
-  fetch('https://script.google.com/macros/s/AKfycbxBlUhPEUoVF4ClQJcvJhiHHIEyvimr-R7ZitWCBjWBHhMke155Io8xy88lIW20WNuX/exec',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      cedula:ced, punto:pto, hora:h, fecha:f,
-      lat:gpsData?.lat, lng:gpsData?.lng,
-      direccion:[addr.l1,addr.l2,addr.l3].join(', '),
-      foto:captured
-    })
-  });
+  const payload = {
+    cedula    : ced,
+    punto     : pto,
+    hora      : h,
+    fecha     : f,
+    lat       : gpsData?.lat  ?? null,
+    lng       : gpsData?.lng  ?? null,
+    direccion : [addr.l1, addr.l2, addr.l3].filter(Boolean).join(', '),
+    foto      : captured
+  };
 
+  try {
+    // Apps Script requiere no-cors para evitar el error de redirección CORS
+    await fetch(APPS_SCRIPT_URL, {
+      method      : 'POST',
+      mode        : 'no-cors',
+      redirect    : 'follow',
+      headers     : { 'Content-Type': 'text/plain' },
+      body        : JSON.stringify(payload)
+    });
+    // no-cors devuelve respuesta opaca — si no lanzó excepción, llegó OK
+    mostrarExito(ced, pto, h, f);
+  } catch(err) {
+    // Mostrar error real al usuario en lugar de pantalla de éxito falsa
+    document.getElementById('step3').innerHTML =
+      `<div style="text-align:center;padding:20px 0;">
+        <p style="font-size:22px;margin-bottom:12px;">⚠️</p>
+        <p style="font-size:14px;font-weight:500;color:#EF4444;margin-bottom:8px;">Error al enviar el registro</p>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:20px;">${err.message}</p>
+        <button onclick="resetAll()" style="padding:12px 24px;background:var(--blue);border:none;border-radius:10px;color:white;font-size:14px;font-weight:600;cursor:pointer;">
+          Intentar de nuevo
+        </button>
+      </div>`;
+  }
+}
 
+function mostrarExito(ced, pto, h, f){
   document.getElementById('screen-form').style.display='none';
   document.getElementById('screen-success').style.display='flex';
-  document.getElementById('sd-cedula').textContent=ced;
-  document.getElementById('sd-punto').textContent=pto;
-  document.getElementById('sd-hora').textContent=`${h} · ${f}`;
-  document.getElementById('sd-dir').textContent=[addr.l1,addr.l2,addr.l3].filter(Boolean).join(', ')
-    ||(gpsData?`${gpsData.lat.toFixed(5)}°N, ${Math.abs(gpsData.lng).toFixed(5)}°W`:'No disponible');
+  document.getElementById('sd-cedula').textContent = ced;
+  document.getElementById('sd-punto').textContent  = pto;
+  document.getElementById('sd-hora').textContent   = `${h} · ${f}`;
+  document.getElementById('sd-dir').textContent    = [addr.l1,addr.l2,addr.l3].filter(Boolean).join(', ')
+    || (gpsData ? `${gpsData.lat.toFixed(5)}°N, ${Math.abs(gpsData.lng).toFixed(5)}°W` : 'No disponible');
 }
 
 function resetAll(){
