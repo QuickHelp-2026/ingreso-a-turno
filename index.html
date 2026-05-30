@@ -4,576 +4,864 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ingreso Mensajeros · CAFAM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-:root{--navy:#0B1426;--navy2:#142040;--blue:#1A6BFF;--green:#00C853;--red:#FF3B30;--amber:#FFB300;--gray1:#F4F6FA;--gray2:#E8ECF4;--gray3:#B0BAD0;--gray4:#6B7A99;--radius:16px;--radius-sm:10px;}
+:root{
+  --bg:#07090F;
+  --surface:#0E1320;
+  --surface2:#141B2D;
+  --surface3:#1C2539;
+  --border:#1E2A42;
+  --border2:#253352;
+  --blue:#3B82F6;
+  --blue-dim:#1D4ED8;
+  --blue-glow:rgba(59,130,246,0.15);
+  --green:#10B981;
+  --green-glow:rgba(16,185,129,0.12);
+  --red:#EF4444;
+  --amber:#F59E0B;
+  --text:#E8EDF8;
+  --text2:#8B96B0;
+  --text3:#4A5568;
+  --r:14px;--r-sm:10px;--r-xs:7px;
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:white;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;}
-.header{width:100%;max-width:480px;padding:20px 24px 16px;display:flex;align-items:center;gap:12px;}
-.logo-badge{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.header-text h1{font-size:17px;font-weight:600;letter-spacing:-0.3px;}
-.header-text p{font-size:12px;color:var(--gray3);margin-top:1px;}
-.card{width:100%;max-width:480px;background:#111D35;border-radius:24px 24px 0 0;flex:1;padding:28px 24px 40px;display:flex;flex-direction:column;gap:20px;}
+html,body{height:100%;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  overflow-x:hidden;
+}
 
-/* PANTALLA DE PERMISOS */
-.perm-screen{display:flex;flex-direction:column;align-items:center;gap:0;text-align:center;padding:0;}
-.perm-icon-big{font-size:64px;margin-bottom:16px;}
-.perm-screen h2{font-size:22px;font-weight:600;margin-bottom:8px;}
-.perm-screen p{font-size:14px;color:var(--gray3);line-height:1.6;max-width:300px;}
-.perm-list{width:100%;display:flex;flex-direction:column;gap:10px;margin:20px 0;}
-.perm-item{display:flex;align-items:center;gap:14px;background:#1A2840;border-radius:12px;padding:14px 16px;border:1.5px solid #243355;text-align:left;}
-.perm-item-icon{font-size:24px;flex-shrink:0;}
-.perm-item-text strong{display:block;font-size:14px;font-weight:600;margin-bottom:2px;}
-.perm-item-text span{font-size:12px;color:var(--gray3);}
-.perm-item.granted{border-color:rgba(0,200,83,0.4);background:rgba(0,200,83,0.07);}
-.perm-item.denied{border-color:rgba(255,59,48,0.4);background:rgba(255,59,48,0.07);}
-.perm-status{margin-left:auto;font-size:11px;font-weight:600;padding:4px 8px;border-radius:20px;}
-.perm-status.wait{background:rgba(255,179,0,0.15);color:var(--amber);}
-.perm-status.ok{background:rgba(0,200,83,0.15);color:var(--green);}
-.perm-status.fail{background:rgba(255,59,48,0.15);color:var(--red);}
+/* ══ HEADER ══ */
+.header{
+  width:100%;max-width:440px;
+  padding:24px 20px 0;
+  display:flex;align-items:center;gap:14px;
+}
+.logo{
+  width:42px;height:42px;
+  background:linear-gradient(135deg,#1D4ED8,#3B82F6);
+  border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 0 20px rgba(59,130,246,0.3);
+}
+.logo svg{width:22px;height:22px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.header-info{}
+.header-info h1{font-size:15px;font-weight:600;letter-spacing:0.2px;color:var(--text);}
+.header-info p{font-size:11px;color:var(--text3);margin-top:2px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
 
-.alert-box{background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.35);border-radius:12px;padding:14px 16px;font-size:13px;color:#FFD54F;line-height:1.6;text-align:left;display:none;}
-.alert-box strong{display:block;margin-bottom:4px;font-size:14px;}
-.alert-box.show{display:block;}
-.alert-box.red{background:rgba(255,59,48,0.1);border-color:rgba(255,59,48,0.35);color:#FF8A80;}
+/* ══ CARD ══ */
+.card{
+  width:100%;max-width:440px;
+  background:var(--surface);
+  border-radius:20px 20px 0 0;
+  border-top:1px solid var(--border2);
+  margin-top:20px;
+  flex:1;
+  padding:24px 20px 48px;
+  display:flex;flex-direction:column;gap:22px;
+}
 
-.btn-primary{width:100%;padding:17px;background:var(--blue);border:none;border-radius:var(--radius-sm);color:white;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.2px;}
-.btn-primary:active{transform:scale(0.98);}
-.btn-primary:disabled{background:#243355;color:var(--gray4);cursor:not-allowed;transform:none;}
-.btn-secondary{width:100%;padding:14px;background:transparent;border:1.5px solid #243355;border-radius:var(--radius-sm);color:var(--gray3);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+/* ══ PERMISOS ══ */
+.perm-header{text-align:center;padding:8px 0 4px;}
+.perm-header .icon-ring{
+  width:72px;height:72px;margin:0 auto 16px;
+  border-radius:50%;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+}
+.perm-header h2{font-size:20px;font-weight:600;margin-bottom:6px;}
+.perm-header p{font-size:13px;color:var(--text2);line-height:1.6;max-width:280px;margin:0 auto;}
 
-/* STEPS */
-.steps{display:flex;align-items:center;}
-.step{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray3);font-weight:500;}
+.perm-cards{display:flex;flex-direction:column;gap:10px;}
+.perm-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:14px 16px;
+  transition:border-color .3s,background .3s;
+}
+.perm-card.granted{border-color:rgba(16,185,129,0.4);background:var(--green-glow);}
+.perm-card.denied{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.06);}
+.perm-card-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--surface3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.perm-card-body{flex:1;}
+.perm-card-body strong{display:block;font-size:13px;font-weight:600;margin-bottom:2px;}
+.perm-card-body span{font-size:11px;color:var(--text2);}
+.perm-badge{
+  font-size:10px;font-weight:600;padding:4px 9px;border-radius:20px;
+  white-space:nowrap;
+}
+.perm-badge.wait{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.25);}
+.perm-badge.ok{background:rgba(16,185,129,0.12);color:var(--green);border:1px solid rgba(16,185,129,0.25);}
+.perm-badge.fail{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
+
+/* ══ ALERTS ══ */
+.alert{
+  border-radius:var(--r-sm);padding:14px 16px;
+  font-size:12px;line-height:1.7;display:none;
+}
+.alert.show{display:block;}
+.alert strong{display:block;font-size:13px;font-weight:600;margin-bottom:4px;}
+.alert-warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);color:#FCD34D;}
+.alert-red{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5;}
+.alert-info{background:var(--blue-glow);border:1px solid rgba(59,130,246,0.25);color:#93C5FD;}
+
+/* ══ STEPS ══ */
+.steps{display:flex;align-items:center;gap:0;}
+.step{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.3px;text-transform:uppercase;}
 .step.active{color:var(--blue);}
 .step.done{color:var(--green);}
-.step-num{width:22px;height:22px;border-radius:50%;background:#1E2D4A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;}
-.step.active .step-num{background:var(--blue);color:white;}
-.step.done .step-num{background:var(--green);color:white;}
-.step-line{flex:1;height:1px;background:#1E2D4A;margin:0 6px;}
-.section-label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--gray4);margin-bottom:6px;}
-.input-wrap{position:relative;}
-.input-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.4;}
-input[type=text],input[type=number],select{width:100%;background:#1A2840;border:1.5px solid #243355;border-radius:var(--radius-sm);color:white;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:14px 14px 14px 44px;outline:none;transition:border-color .2s;-webkit-appearance:none;}
-input:focus{border-color:var(--blue);}
-input::placeholder{color:var(--gray4);font-weight:400;}
-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%236B7A99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
-select option{background:#1A2840;}
+.step-dot{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--text3);
+}
+.step.active .step-dot{background:var(--blue-dim);border-color:var(--blue);color:white;}
+.step.done .step-dot{background:rgba(16,185,129,0.15);border-color:var(--green);color:var(--green);}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 8px;}
 
-/* CÁMARA */
-.viewfinder-wrap{position:relative;width:100%;aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;background:#0B1426;border:1.5px solid #243355;}
-#video{width:100%;height:100%;object-fit:cover;display:block;}
-.stamp-overlay{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.75) 40%);display:flex;flex-direction:column;align-items:flex-end;gap:2px;pointer-events:none;}
-.stamp-line{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:white;text-shadow:0 1px 3px rgba(0,0,0,0.8);text-align:right;line-height:1.5;}
-.stamp-line.big{font-size:15px;font-weight:600;}
-.map-preview{position:absolute;top:12px;left:12px;width:90px;height:90px;border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.5);background:#1A2840;display:flex;align-items:center;justify-content:center;}
-.map-preview iframe{width:100%;height:100%;border:none;pointer-events:none;}
-.corner{position:absolute;width:20px;height:20px;}
-.corner.tl{top:8px;left:8px;border-top:2px solid var(--blue);border-left:2px solid var(--blue);border-radius:4px 0 0 0;}
-.corner.tr{top:8px;right:8px;border-top:2px solid var(--blue);border-right:2px solid var(--blue);border-radius:0 4px 0 0;}
-.corner.bl{bottom:8px;left:8px;border-bottom:2px solid var(--blue);border-left:2px solid var(--blue);border-radius:0 0 0 4px;}
-.corner.br{bottom:8px;right:8px;border-bottom:2px solid var(--blue);border-right:2px solid var(--blue);border-radius:0 0 4px 0;}
-#canvas{display:none;}
-.photo-preview-wrap{position:relative;width:100%;aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;border:1.5px solid #243355;display:none;}
-.photo-preview-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
-.retake-btn{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.2);color:white;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 12px;border-radius:20px;cursor:pointer;}
-.shutter-row{display:flex;align-items:center;justify-content:center;gap:24px;padding:4px 0;}
-.shutter-btn{width:72px;height:72px;border-radius:50%;background:white;border:5px solid rgba(255,255,255,0.3);cursor:pointer;position:relative;transition:transform .1s;flex-shrink:0;box-shadow:0 0 0 2px var(--blue);}
-.shutter-btn:active{transform:scale(0.94);}
-.shutter-btn::after{content:'';position:absolute;inset:6px;border-radius:50%;background:white;}
-.cam-switch-btn{width:44px;height:44px;border-radius:50%;background:#1A2840;border:1.5px solid #243355;color:var(--gray3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.gps-pill{display:inline-flex;align-items:center;gap:6px;background:#1A2840;border:1px solid #243355;border-radius:20px;padding:6px 12px;font-size:12px;color:var(--gray3);font-weight:500;align-self:flex-start;}
-.gps-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 1.2s ease-in-out infinite;}
-.gps-dot.ok{background:var(--green);animation:none;}
-.gps-dot.error{background:var(--red);animation:none;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* ══ LABELS Y INPUTS ══ */
+.field-label{font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.field{position:relative;}
+.field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.35;width:17px;height:17px;}
+input[type=number],select{
+  width:100%;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:var(--r-sm);
+  color:var(--text);
+  font-family:'Outfit',sans-serif;
+  font-size:15px;font-weight:500;
+  padding:14px 14px 14px 42px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow);}
+input::placeholder{color:var(--text3);font-weight:400;}
+select{
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%234A5568' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;
+}
+select option{background:var(--surface2);}
 
-/* SUCCESS */
-#success-screen{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:20px 0;}
-.success-icon{width:80px;height:80px;background:rgba(0,200,83,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;border:2px solid var(--green);}
-.success-detail{background:#1A2840;border:1px solid #243355;border-radius:var(--radius-sm);padding:16px;width:100%;display:flex;flex-direction:column;gap:8px;text-align:left;}
-.detail-row{display:flex;justify-content:space-between;align-items:center;}
-.detail-label{font-size:12px;color:var(--gray4);}
-.detail-val{font-size:13px;font-weight:500;font-family:'DM Mono',monospace;}
-.status-ok{background:rgba(0,200,83,0.15);color:var(--green);border:1px solid rgba(0,200,83,0.3);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
-.spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.2);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ══ BOTONES ══ */
+.btn{
+  width:100%;padding:15px;border:none;
+  border-radius:var(--r-sm);
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .15s;letter-spacing:0.1px;
+}
+.btn-primary{
+  background:var(--blue);color:white;
+  box-shadow:0 4px 20px rgba(59,130,246,0.25);
+}
+.btn-primary:hover{background:#2563EB;}
+.btn-primary:active{transform:scale(0.98);}
+.btn-primary:disabled{background:var(--surface3);color:var(--text3);box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-ghost:active{background:var(--surface2);}
+
+/* ══ CÁMARA ══ */
+.cam-label-row{display:flex;justify-content:space-between;align-items:center;}
+.gps-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:20px;padding:5px 11px;
+  font-size:11px;color:var(--text2);font-weight:500;
+}
+.dot{width:6px;height:6px;border-radius:50%;}
+.dot-amber{background:var(--amber);animation:blink 1.2s ease-in-out infinite;}
+.dot-green{background:var(--green);}
+.dot-red{background:var(--red);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* VIEWFINDER */
+.vf-wrap{
+  position:relative;width:100%;
+  /* Aspecto 4:3 — más alejado, se ve más del ambiente */
+  aspect-ratio:4/3;
+  border-radius:var(--r);
+  overflow:hidden;
+  background:#000;
+  border:1px solid var(--border2);
+}
+#video{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+}
+
+/* SELLO — esquina inferior derecha, igual que referencia */
+.stamp{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:10px 14px 16px;
+  background:linear-gradient(transparent,rgba(0,0,0,0.68) 35%);
+  display:flex;flex-direction:column;align-items:flex-end;gap:1px;
+  pointer-events:none;
+}
+.stamp-dt{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;font-weight:500;
+  color:white;text-align:right;
+  text-shadow:1px 1px 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.6);
+  line-height:1.55;white-space:nowrap;
+}
+.stamp-addr{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;font-weight:400;
+  color:rgba(255,255,255,0.92);text-align:right;
+  text-shadow:1px 1px 4px rgba(0,0,0,0.9);
+  line-height:1.5;white-space:nowrap;
+}
+
+/* MINI MAPA */
+.map-box{
+  position:absolute;top:10px;left:10px;
+  width:80px;height:80px;
+  border-radius:9px;overflow:hidden;
+  border:2px solid rgba(255,255,255,0.45);
+  background:#1a2030;
+  box-shadow:0 2px 8px rgba(0,0,0,0.5);
+}
+.map-box iframe{width:100%;height:100%;border:none;pointer-events:none;}
+.map-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+
+/* CORNERS */
+.vf-corner{position:absolute;width:18px;height:18px;}
+.vf-corner.tl{top:8px;left:8px;border-top:2px solid var(--blue);border-left:2px solid var(--blue);border-radius:3px 0 0 0;}
+.vf-corner.tr{top:8px;right:8px;border-top:2px solid var(--blue);border-right:2px solid var(--blue);border-radius:0 3px 0 0;}
+.vf-corner.bl{bottom:8px;left:8px;border-bottom:2px solid var(--blue);border-left:2px solid var(--blue);border-radius:0 0 0 3px;}
+.vf-corner.br{bottom:8px;right:8px;border-bottom:2px solid var(--blue);border-right:2px solid var(--blue);border-radius:0 0 3px 0;}
+
+/* FOTO CAPTURADA */
+.photo-wrap{position:relative;width:100%;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;border:1px solid var(--border2);display:none;}
+.photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.retake{
+  position:absolute;top:10px;right:10px;
+  background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,0.2);color:white;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;
+  padding:6px 12px;border-radius:20px;cursor:pointer;
+}
+
 canvas{display:none;}
+
+/* SHUTTER */
+.shutter-row{display:flex;align-items:center;justify-content:center;gap:28px;}
+.btn-switch{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.shutter{
+  width:68px;height:68px;border-radius:50%;
+  background:transparent;
+  border:3px solid white;
+  cursor:pointer;position:relative;
+  transition:transform .1s;
+  flex-shrink:0;
+}
+.shutter::after{
+  content:'';position:absolute;
+  inset:5px;border-radius:50%;
+  background:white;
+  transition:background .1s;
+}
+.shutter:active{transform:scale(0.93);}
+.shutter:active::after{background:#ddd;}
+
+/* ══ SUCCESS ══ */
+.success-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:8px 0;}
+.check-ring{
+  width:76px;height:76px;border-radius:50%;
+  background:rgba(16,185,129,0.1);border:1.5px solid rgba(16,185,129,0.4);
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+}
+.success-wrap h2{font-size:21px;font-weight:700;}
+.success-wrap p{font-size:13px;color:var(--text2);line-height:1.6;max-width:260px;}
+.info-card{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:16px;
+  display:flex;flex-direction:column;gap:10px;text-align:left;
+}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.info-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;padding-top:1px;}
+.info-val{font-size:12px;font-weight:500;font-family:'JetBrains Mono',monospace;text-align:right;color:var(--text);}
+.badge-ok{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(16,185,129,0.1);color:var(--green);
+  border:1px solid rgba(16,185,129,0.25);
+  padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;
+}
+.divider{height:1px;background:var(--border);margin:2px 0;}
+
+/* ══ LOADING ══ */
+.spin{
+  width:32px;height:32px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,0.12);
+  border-top-color:var(--blue);
+  animation:spin .75s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{display:flex;flex-direction:column;align-items:center;gap:14px;padding:32px 0;}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <div class="logo-badge">📦</div>
-  <div class="header-text">
-    <h1>MALLA CAFAM · HEEL</h1>
-    <p>Registro de ingreso de mensajeros</p>
+  <div class="logo">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+  </div>
+  <div class="header-info">
+    <h1>CAFAM · HEEL</h1>
+    <p>Sistema de registro de ingreso</p>
   </div>
 </div>
 
-<!-- ══ PANTALLA 0: PERMISOS OBLIGATORIOS ══ -->
+<!-- ════════════════════════════════════
+     PANTALLA 0 — PERMISOS
+════════════════════════════════════ -->
 <div class="card" id="screen-permisos">
-  <div class="perm-screen">
-    <div class="perm-icon-big">🔐</div>
-    <h2>Permisos requeridos</h2>
-    <p>Para registrar tu ingreso necesitamos acceso a tu <strong>cámara</strong> y <strong>ubicación GPS</strong>. Ambos son obligatorios.</p>
 
-    <div class="perm-list">
-      <div class="perm-item" id="item-gps">
-        <div class="perm-item-icon">📍</div>
-        <div class="perm-item-text">
-          <strong>Ubicación GPS</strong>
-          <span>Verifica que estás en el punto asignado</span>
-        </div>
-        <span class="perm-status wait" id="st-gps">Esperando</span>
-      </div>
-      <div class="perm-item" id="item-cam">
-        <div class="perm-item-icon">📷</div>
-        <div class="perm-item-text">
-          <strong>Cámara</strong>
-          <span>Tomar la foto de ingreso con sello</span>
-        </div>
-        <span class="perm-status wait" id="st-cam">Esperando</span>
-      </div>
-    </div>
-
-    <!-- Instrucciones si deniegan -->
-    <div class="alert-box" id="alert-https">
-      <strong>⚠️ Abre esta app desde un servidor HTTPS</strong>
-      El navegador bloquea cámara y GPS cuando el archivo se abre localmente. Sube este archivo a <strong>GitHub Pages, Netlify o Google Sites</strong> y ábrelo desde ese enlace seguro.
-    </div>
-
-    <div class="alert-box" id="alert-denied">
-      <strong>⚠️ Permiso denegado — cómo activarlo:</strong>
-      1. Toca el ícono 🔒 o ⓘ en la barra de dirección<br>
-      2. Busca "Ubicación" y "Cámara"<br>
-      3. Cambia ambos a <strong>Permitir</strong><br>
-      4. Recarga la página
-    </div>
-
-    <div class="alert-box red" id="alert-gps-required">
-      <strong>🚫 GPS obligatorio</strong>
-      No puedes registrar el ingreso sin ubicación GPS verificada. Activa el permiso y vuelve a intentarlo.
-    </div>
-
-    <button class="btn-primary" id="btn-solicitar" onclick="solicitarPermisos()">
-      Activar cámara y GPS
-    </button>
-    <button class="btn-secondary" id="btn-reintentar" onclick="solicitarPermisos()" style="display:none;margin-top:8px;">
-      🔄 Reintentar permisos
-    </button>
+  <div class="perm-header">
+    <div class="icon-ring">🔐</div>
+    <h2>Acceso requerido</h2>
+    <p>El sistema necesita verificar tu <strong>ubicación GPS</strong> y activar la <strong>cámara</strong> antes de registrar el ingreso.</p>
   </div>
+
+  <div class="perm-cards">
+    <div class="perm-card" id="item-gps">
+      <div class="perm-card-icon">📍</div>
+      <div class="perm-card-body">
+        <strong>Ubicación GPS</strong>
+        <span>Obligatoria · Verifica el punto de trabajo</span>
+      </div>
+      <span class="perm-badge wait" id="st-gps">Pendiente</span>
+    </div>
+    <div class="perm-card" id="item-cam">
+      <div class="perm-card-icon">📷</div>
+      <div class="perm-card-body">
+        <strong>Cámara</strong>
+        <span>Foto de ingreso con sello verificado</span>
+      </div>
+      <span class="perm-badge wait" id="st-cam">Pendiente</span>
+    </div>
+  </div>
+
+  <div class="alert alert-warn" id="alert-https">
+    <strong>⚠️ Se requiere conexión HTTPS</strong>
+    La cámara y el GPS solo funcionan cuando la app está publicada en un servidor seguro (Netlify, GitHub Pages, etc.). Abrirla como archivo local no activa estos permisos.
+  </div>
+
+  <div class="alert alert-red" id="alert-gps-denied">
+    <strong>🚫 GPS denegado — pasos para activarlo:</strong>
+    1. Toca el ícono 🔒 en la barra de dirección del navegador<br>
+    2. Toca <strong>Permisos del sitio</strong> → <strong>Ubicación</strong><br>
+    3. Selecciona <strong>Permitir</strong><br>
+    4. Vuelve a la app y toca <em>Reintentar</em>
+  </div>
+
+  <div class="alert alert-red" id="alert-cam-denied">
+    <strong>📷 Cámara denegada — pasos para activarla:</strong>
+    1. Toca 🔒 en la barra de dirección<br>
+    2. <strong>Permisos del sitio</strong> → <strong>Cámara</strong><br>
+    3. Selecciona <strong>Permitir</strong> y recarga la app
+  </div>
+
+  <div class="alert alert-info" id="alert-gps-req" style="display:none;">
+    <strong>📍 GPS obligatorio</strong>
+    No es posible continuar sin ubicación verificada. El coordinador necesita confirmar que estás en el punto asignado.
+  </div>
+
+  <button class="btn btn-primary" id="btn-pedir" onclick="solicitarPermisos()">
+    Activar GPS y cámara
+  </button>
+  <button class="btn btn-ghost" id="btn-retry" onclick="solicitarPermisos()" style="display:none;">
+    🔄 Reintentar
+  </button>
+
 </div>
 
-<!-- ══ PANTALLA 1: FORMULARIO ══ -->
+<!-- ════════════════════════════════════
+     PANTALLA 1 — FORMULARIO
+════════════════════════════════════ -->
 <div class="card" id="screen-form" style="display:none;">
+
+  <!-- Steps -->
   <div class="steps">
-    <div class="step active" id="s1"><div class="step-num">1</div> Datos</div>
+    <div class="step active" id="s1"><div class="step-dot">1</div>Datos</div>
     <div class="step-line"></div>
-    <div class="step" id="s2"><div class="step-num">2</div> Foto</div>
+    <div class="step" id="s2"><div class="step-dot">2</div>Foto</div>
     <div class="step-line"></div>
-    <div class="step" id="s3"><div class="step-num">3</div> Envío</div>
+    <div class="step" id="s3"><div class="step-dot">3</div>Envío</div>
   </div>
 
+  <!-- ── STEP 1 ── -->
   <div id="step1">
-    <p class="section-label">Datos del mensajero</p>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div class="input-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <input type="number" id="cedula" placeholder="Número de cédula" inputmode="numeric"/>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p class="field-label">Número de cédula</p>
+        <div class="field">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="number" id="cedula" placeholder="Ej. 1032359927" inputmode="numeric"/>
+        </div>
       </div>
-      <div class="input-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <select id="punto">
-          <option value="">Selecciona el punto</option>
-          <option>PASILLO</option><option>PLAZA IMPERIAL</option><option>PLUS 127</option>
-          <option>QUIRINAL</option><option>TIERRA FIRME</option><option>TINTAL</option>
-          <option>V. PRADO</option><option>ZARZAMORA</option><option>CHAPINERO</option>
-          <option>SUBA</option><option>FONTIBON</option><option>BOSA</option>
-        </select>
+      <div>
+        <p class="field-label">Punto de trabajo</p>
+        <div class="field">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <select id="punto">
+            <option value="">Selecciona el punto</option>
+            <option>PASILLO</option><option>PLAZA IMPERIAL</option><option>PLUS 127</option>
+            <option>QUIRINAL</option><option>TIERRA FIRME</option><option>TINTAL</option>
+            <option>V. PRADO</option><option>ZARZAMORA</option><option>CHAPINERO</option>
+            <option>SUBA</option><option>FONTIBON</option><option>BOSA</option>
+          </select>
+        </div>
       </div>
     </div>
-    <button class="btn-primary" style="margin-top:16px;" onclick="goStep2()">Continuar → Tomar foto</button>
+    <button class="btn btn-primary" style="margin-top:20px;" onclick="goStep2()">
+      Continuar
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
   </div>
 
+  <!-- ── STEP 2 ── -->
   <div id="step2" style="display:none;flex-direction:column;gap:14px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <p class="section-label" style="margin:0;">Foto de ingreso</p>
+
+    <div class="cam-label-row">
+      <p class="field-label" style="margin:0;">Foto de ingreso</p>
       <div class="gps-pill">
-        <div class="gps-dot ok" id="gps-dot2"></div>
-        <span id="gps-text2">GPS activo</span>
+        <div class="dot dot-green" id="gps-dot2"></div>
+        <span id="gps-label2">GPS activo</span>
       </div>
     </div>
 
-    <div class="viewfinder-wrap" id="viewfinder">
+    <!-- VIEWFINDER — aspecto 4:3 para ver más ambiente -->
+    <div class="vf-wrap" id="viewfinder">
       <video id="video" autoplay playsinline muted></video>
-      <div class="stamp-overlay">
-        <div class="stamp-line big" id="live-datetime">--/--/---- --:--:--</div>
-        <div class="stamp-line" id="live-addr1">Obteniendo dirección…</div>
-        <div class="stamp-line" id="live-addr2"></div>
-        <div class="stamp-line" id="live-addr3"></div>
+      <div class="stamp" id="stamp-live">
+        <span class="stamp-dt" id="live-dt">--/--/---- --:--:-- p.m.</span>
+        <span class="stamp-addr" id="live-a1">Obteniendo dirección…</span>
+        <span class="stamp-addr" id="live-a2"></span>
+        <span class="stamp-addr" id="live-a3"></span>
       </div>
-      <div class="map-preview" id="map-preview"><span style="font-size:28px;">📍</span></div>
-      <div class="corner tl"></div><div class="corner tr"></div>
-      <div class="corner bl"></div><div class="corner br"></div>
+      <div class="map-box" id="map-box"><div class="map-placeholder">📍</div></div>
+      <div class="vf-corner tl"></div><div class="vf-corner tr"></div>
+      <div class="vf-corner bl"></div><div class="vf-corner br"></div>
     </div>
 
-    <div class="photo-preview-wrap" id="photo-preview-wrap">
-      <img id="photo-preview" alt="Foto capturada"/>
-      <button class="retake-btn" onclick="retakePhoto()">↺ Repetir</button>
+    <!-- FOTO TOMADA -->
+    <div class="photo-wrap" id="photo-wrap">
+      <img id="photo-img" alt="Foto capturada"/>
+      <button class="retake" onclick="retakePhoto()">↺ Repetir foto</button>
     </div>
     <canvas id="canvas"></canvas>
 
+    <!-- CONTROLES -->
     <div class="shutter-row" id="shutter-row">
-      <button class="cam-switch-btn" onclick="switchCamera()">🔄</button>
-      <button class="shutter-btn" onclick="capturePhoto()"></button>
+      <button class="btn-switch" onclick="switchCam()" title="Girar cámara">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      </button>
+      <button class="shutter" id="shutter" onclick="capturePhoto()"></button>
       <div style="width:44px;"></div>
     </div>
 
-    <button class="btn-primary" id="btn-enviar" onclick="goStep3()" disabled>Registrar ingreso</button>
+    <button class="btn btn-primary" id="btn-enviar" onclick="goStep3()" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Registrar ingreso
+    </button>
   </div>
 
-  <div id="step3" style="display:none;flex-direction:column;gap:16px;align-items:center;padding:20px 0;">
-    <div class="spinner" style="width:40px;height:40px;border-width:3px;"></div>
-    <p style="font-size:15px;color:var(--gray3);">Registrando ingreso…</p>
-    <p style="font-size:12px;color:var(--gray4);text-align:center;">Verificando contra la malla del coordinador</p>
-  </div>
-</div>
-
-<!-- ══ PANTALLA SUCCESS ══ -->
-<div id="screen-success" class="card" style="display:none;">
-  <div id="success-screen" style="display:flex;">
-    <div class="success-icon">✅</div>
-    <h2 style="font-size:22px;font-weight:600;">Ingreso registrado</h2>
-    <p style="font-size:14px;color:var(--gray3);line-height:1.6;max-width:280px;">Reporte enviado al coordinador y regente encargado.</p>
-    <div class="success-detail">
-      <div class="detail-row"><span class="detail-label">Cédula</span><span class="detail-val" id="sd-cedula">—</span></div>
-      <div class="detail-row"><span class="detail-label">Punto</span><span class="detail-val" id="sd-punto">—</span></div>
-      <div class="detail-row"><span class="detail-label">Hora</span><span class="detail-val" id="sd-hora">—</span></div>
-      <div class="detail-row"><span class="detail-label">Dirección</span><span class="detail-val" id="sd-dir" style="font-size:11px;text-align:right;max-width:200px;">—</span></div>
-      <div class="detail-row"><span class="detail-label">Estado</span><span class="status-ok">✓ En horario</span></div>
+  <!-- ── STEP 3 (loading) ── -->
+  <div id="step3" style="display:none;">
+    <div class="loading-state">
+      <div class="spin"></div>
+      <p style="font-size:15px;font-weight:500;">Registrando ingreso…</p>
+      <p style="font-size:12px;color:var(--text2);text-align:center;line-height:1.6;">Verificando cédula contra la malla del coordinador y enviando alerta</p>
     </div>
-    <button class="btn-secondary" onclick="resetForm()" style="margin-top:8px;">+ Nuevo registro</button>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     PANTALLA 2 — ÉXITO
+════════════════════════════════════ -->
+<div class="card" id="screen-success" style="display:none;">
+  <div class="success-wrap">
+    <div class="check-ring">✅</div>
+    <h2>Ingreso registrado</h2>
+    <p>Reporte enviado al coordinador y regente. Queda registrado en la malla de control.</p>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">Cédula</span>
+        <span class="info-val" id="sd-cedula">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-label">Punto</span>
+        <span class="info-val" id="sd-punto">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-label">Hora</span>
+        <span class="info-val" id="sd-hora">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-label">Dirección</span>
+        <span class="info-val" id="sd-dir" style="font-size:11px;max-width:220px;">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-label">Estado</span>
+        <span class="badge-ok">● En horario</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="resetAll()" style="width:100%;">+ Nuevo registro</button>
   </div>
 </div>
 
+<!-- ════ SCRIPT ════ -->
 <script>
-// ══ ESTADO GLOBAL ══
-let stream = null;
-let facingMode = 'environment';
-let gpsData = null;
-let addressData = {line1:'',line2:'',line3:''};
-let capturedDataURL = null;
-let permGPS = false;
-let permCAM = false;
+// ── ESTADO
+let stream=null, facingMode='environment';
+let gpsData=null, addr={l1:'',l2:'',l3:''};
+let captured=null;
+let clockTimer=null;
 
-// ══ DETECCIÓN HTTPS ══
-function isSecureContext() {
-  return window.isSecureContext || location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-}
-
-window.addEventListener('load', () => {
-  if (!isSecureContext()) {
+// ── HTTPS CHECK
+window.addEventListener('load',()=>{
+  const secure = window.isSecureContext || ['https:',''].includes(location.protocol) || ['localhost','127.0.0.1'].includes(location.hostname);
+  if(!secure){
     document.getElementById('alert-https').classList.add('show');
-    document.getElementById('btn-solicitar').disabled = true;
-    document.getElementById('btn-solicitar').textContent = '⚠️ Requiere HTTPS';
-    markItem('gps','fail','Sin HTTPS');
-    markItem('cam','fail','Sin HTTPS');
-    return;
+    const b=document.getElementById('btn-pedir');
+    b.disabled=true; b.textContent='⚠️ Requiere HTTPS';
+    setPerm('gps','fail','Sin HTTPS'); setPerm('cam','fail','Sin HTTPS');
   }
   startClock();
 });
 
-// ══ SOLICITAR PERMISOS ══
-async function solicitarPermisos() {
-  document.getElementById('btn-solicitar').disabled = true;
-  document.getElementById('btn-solicitar').innerHTML = '<div class="spinner"></div> Solicitando…';
-  document.getElementById('alert-denied').classList.remove('show');
-  document.getElementById('alert-gps-required').classList.remove('show');
+// ── RELOJ LIVE (cada segundo)
+function startClock(){
+  function tick(){
+    const now=new Date();
+    const d=now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
+    const t=now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+    const el=document.getElementById('live-dt');
+    if(el) el.textContent=`${d} ${t}`;
+  }
+  tick(); clockTimer=setInterval(tick,1000);
+}
 
-  // 1. PEDIR GPS PRIMERO — obligatorio
-  markItem('gps','wait','Solicitando…');
-  try {
-    const pos = await new Promise((res, rej) => {
-      navigator.geolocation.getCurrentPosition(res, rej, {
-        enableHighAccuracy: true, timeout: 20000, maximumAge: 0
-      });
+// ── PERMISOS
+async function solicitarPermisos(){
+  const btn=document.getElementById('btn-pedir');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spin" style="width:18px;height:18px;border-width:2px;"></div> Solicitando…';
+  hide('alert-gps-denied'); hide('alert-cam-denied'); hide('alert-gps-req');
+
+  // 1. GPS — OBLIGATORIO
+  setPerm('gps','wait','Solicitando…');
+  try{
+    const pos=await new Promise((res,rej)=>
+      navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:20000,maximumAge:0})
+    );
+    gpsData={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:pos.coords.accuracy};
+    setPerm('gps','ok','✓ Verificado');
+    reverseGeocode(gpsData.lat,gpsData.lng);
+    loadMap(gpsData.lat,gpsData.lng);
+  }catch(e){
+    setPerm('gps','fail','Denegado');
+    show('alert-gps-denied'); show('alert-gps-req');
+    resetBtn(); return; // BLOQUEAR
+  }
+
+  // 2. CÁMARA
+  setPerm('cam','wait','Solicitando…');
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode,width:{ideal:1920},height:{ideal:1440}},audio:false
     });
-    gpsData = {lat: pos.coords.latitude, lng: pos.coords.longitude, acc: pos.coords.accuracy};
-    permGPS = true;
-    markItem('gps','ok','✓ Obtenido');
-    reverseGeocode(gpsData.lat, gpsData.lng);
-    loadMapPreview(gpsData.lat, gpsData.lng);
-  } catch(e) {
-    permGPS = false;
-    markItem('gps','fail','Denegado');
-    document.getElementById('alert-denied').classList.add('show');
-    document.getElementById('alert-gps-required').classList.add('show');
-    resetBtn();
-    return; // GPS obligatorio — detener aquí
+    s.getTracks().forEach(t=>t.stop()); // solo verificamos permiso
+    setPerm('cam','ok','✓ Activa');
+  }catch(e){
+    setPerm('cam','fail','Denegado');
+    show('alert-cam-denied'); resetBtn(); return;
   }
 
-  // 2. PEDIR CÁMARA
-  markItem('cam','wait','Solicitando…');
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: {facingMode, width:{ideal:1280}, height:{ideal:1706}},
-      audio: false
-    });
-    permCAM = true;
-    markItem('cam','ok','✓ Activa');
-  } catch(e) {
-    permCAM = false;
-    markItem('cam','fail','Denegado');
-    document.getElementById('alert-denied').classList.add('show');
-    resetBtn();
-    return;
-  }
-
-  // ══ AMBOS PERMISOS OK → ENTRAR AL FORMULARIO ══
-  setTimeout(() => {
-    document.getElementById('screen-permisos').style.display = 'none';
-    document.getElementById('screen-form').style.display = 'flex';
-    // La cámara ya está lista, la conectamos al video en step2
-    stream.getTracks().forEach(t => t.stop()); // la detenemos; se reactiva al ir a step2
-    stream = null;
-  }, 600);
+  // AMBOS OK
+  setTimeout(()=>{
+    hide('screen-permisos'); show('screen-form');
+  },500);
 }
 
-function markItem(which, state, text) {
-  const item = document.getElementById('item-' + which);
-  const st   = document.getElementById('st-' + which);
-  item.className = 'perm-item' + (state === 'ok' ? ' granted' : state === 'fail' ? ' denied' : '');
-  st.className   = 'perm-status ' + (state === 'ok' ? 'ok' : state === 'fail' ? 'fail' : 'wait');
-  st.textContent = text;
+function setPerm(which,state,txt){
+  const card=document.getElementById('item-'+which);
+  const badge=document.getElementById('st-'+which);
+  card.className='perm-card'+(state==='ok'?' granted':state==='fail'?' denied':'');
+  badge.className='perm-badge '+(state==='ok'?'ok':state==='fail'?'fail':'wait');
+  badge.textContent=txt;
 }
-
-function resetBtn() {
-  const btn = document.getElementById('btn-solicitar');
-  btn.disabled = false;
-  btn.textContent = 'Activar cámara y GPS';
-  document.getElementById('btn-reintentar').style.display = 'block';
+function resetBtn(){
+  const b=document.getElementById('btn-pedir');
+  b.disabled=false; b.textContent='Activar GPS y cámara';
+  document.getElementById('btn-retry').style.display='flex';
 }
+function show(id){document.getElementById(id).style.display='block';}
+function hide(id){document.getElementById(id).style.display='none';}
 
-// ══ RELOJ ══
-function startClock() {
-  function tick() {
-    const now = new Date();
-    const d = now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
-    const t = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-    const el = document.getElementById('live-datetime');
-    if(el) el.textContent = `${d} ${t}`;
-  }
-  tick();
-  setInterval(tick, 1000);
-}
-
-// ══ GEOCODIFICACIÓN ══
-function reverseGeocode(lat, lng) {
+// ── GEOCODING (dirección completa)
+function reverseGeocode(lat,lng){
   fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=es`)
-    .then(r => r.json())
-    .then(data => {
-      const a = data.address || {};
-      addressData.line1 = ((a.road||a.pedestrian||a.suburb||'') + (a.house_number?' '+a.house_number:'')).trim() || `${lat.toFixed(5)}°N`;
-      addressData.line2 = a.suburb||a.neighbourhood||a.quarter||'';
-      addressData.line3 = a.city||a.town||a.municipality||'Bogotá';
-      const el1 = document.getElementById('live-addr1');
-      const el2 = document.getElementById('live-addr2');
-      const el3 = document.getElementById('live-addr3');
-      if(el1) el1.textContent = addressData.line1;
-      if(el2) el2.textContent = addressData.line2;
-      if(el3) el3.textContent = addressData.line3;
-      document.getElementById('gps-text2').textContent = addressData.line1.substring(0,20)+'…';
+    .then(r=>r.json()).then(d=>{
+      const a=d.address||{};
+      const road=(a.road||a.pedestrian||a.suburb||'').trim();
+      const num=a.house_number||'';
+      const barrio=a.suburb||a.neighbourhood||a.quarter||'';
+      const ciudad=a.city||a.town||a.municipality||'Bogotá';
+      addr.l1=(road+(num?' '+num:'')).trim()||`${lat.toFixed(5)}°N`;
+      addr.l2=barrio;
+      addr.l3=ciudad;
+      setStamp();
+      const gl=document.getElementById('gps-label2');
+      if(gl) gl.textContent=truncate(addr.l1,22);
     })
-    .catch(() => {
-      addressData.line1 = `${lat.toFixed(5)}°N`;
-      addressData.line2 = `${Math.abs(lng).toFixed(5)}°W`;
-    });
+    .catch(()=>{ addr.l1=`${lat.toFixed(5)}°N`; addr.l2=`${Math.abs(lng).toFixed(5)}°W`; setStamp(); });
+}
+function setStamp(){
+  const s=['live-a1','live-a2','live-a3'];
+  const vals=[addr.l1,addr.l2,addr.l3];
+  s.forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=vals[i]; });
+}
+function truncate(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+
+function loadMap(lat,lng){
+  const url=`https://www.openstreetmap.org/export/embed.html?bbox=${lng-.0025},${lat-.0025},${lng+.0025},${lat+.0025}&layer=mapnik&marker=${lat},${lng}`;
+  const el=document.getElementById('map-box');
+  if(el) el.innerHTML=`<iframe src="${url}" title="GPS"></iframe>`;
 }
 
-function loadMapPreview(lat, lng) {
-  const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.003},${lat-0.003},${lng+0.003},${lat+0.003}&layer=mapnik&marker=${lat},${lng}`;
-  const el = document.getElementById('map-preview');
-  if(el) el.innerHTML = `<iframe src="${url}" title="Mapa GPS"></iframe>`;
-}
-
-// ══ CÁMARA ══
-async function startCamera() {
-  try {
-    if(stream) stream.getTracks().forEach(t => t.stop());
-    stream = await navigator.mediaDevices.getUserMedia({
-      video:{facingMode, width:{ideal:1280}, height:{ideal:1706}},
+// ── CÁMARA
+async function startCam(){
+  try{
+    if(stream) stream.getTracks().forEach(t=>t.stop());
+    // Pedimos resolución alta pero sin forzar zoom
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode,
+        width:{ideal:1920,max:2560},
+        height:{ideal:1440,max:1920},
+        zoom:false  // sin zoom digital
+      },
       audio:false
     });
-    document.getElementById('video').srcObject = stream;
-  } catch(e) { alert('No se pudo acceder a la cámara. Recarga la página.'); }
+    const v=document.getElementById('video');
+    v.srcObject=stream;
+    // Desactivar zoom si la API lo soporta
+    const track=stream.getVideoTracks()[0];
+    if(track && track.getCapabilities){
+      const caps=track.getCapabilities();
+      if(caps.zoom){
+        track.applyConstraints({advanced:[{zoom:caps.zoom.min||1}]});
+      }
+    }
+  }catch(e){ alert('Error de cámara. Recarga la página.'); }
+}
+async function switchCam(){
+  facingMode=facingMode==='environment'?'user':'environment';
+  await startCam();
 }
 
-async function switchCamera() {
-  facingMode = facingMode === 'environment' ? 'user' : 'environment';
-  await startCamera();
-}
+// ── CAPTURA CON SELLO COMPLETO
+function capturePhoto(){
+  const v=document.getElementById('video');
+  const c=document.getElementById('canvas');
+  const W=v.videoWidth||1280, H=v.videoHeight||960;
+  c.width=W; c.height=H;
+  const ctx=c.getContext('2d');
 
-// ══ CAPTURA CON SELLO ══
-function capturePhoto() {
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const W = video.videoWidth || 720;
-  const H = video.videoHeight || 960;
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
+  // Volteamos si frontal
+  if(facingMode==='user'){ctx.save();ctx.scale(-1,1);ctx.drawImage(v,-W,0,W,H);ctx.restore();}
+  else ctx.drawImage(v,0,0,W,H);
 
-  if(facingMode === 'user'){
-    ctx.save(); ctx.scale(-1,1); ctx.drawImage(video,-W,0,W,H); ctx.restore();
-  } else {
-    ctx.drawImage(video,0,0,W,H);
-  }
+  // Fecha/hora actual
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
 
-  // Sello fecha/hora/dirección
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const timeStr = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-  const lines = [
-    `${dateStr} ${timeStr}`,
-    addressData.line1 || (gpsData ? `${gpsData.lat.toFixed(5)}°N` : ''),
-    addressData.line2,
-    addressData.line3
-  ].filter(l => l);
+  // Líneas del sello (todas las que haya)
+  const lines=[`${dateStr} ${timeStr}`,addr.l1,addr.l2,addr.l3].filter(l=>l.trim());
 
-  // Gradiente inferior
-  const gradH = Math.round(H * 0.32);
-  const grad = ctx.createLinearGradient(0, H-gradH, 0, H);
-  grad.addColorStop(0,'rgba(0,0,0,0)');
-  grad.addColorStop(1,'rgba(0,0,0,0.72)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, H-gradH, W, gradH);
+  // Gradiente inferior (más suave para no tapar la foto)
+  const gh=Math.round(H*0.28);
+  const gr=ctx.createLinearGradient(0,H-gh,0,H);
+  gr.addColorStop(0,'rgba(0,0,0,0)');
+  gr.addColorStop(1,'rgba(0,0,0,0.65)');
+  ctx.fillStyle=gr; ctx.fillRect(0,H-gh,W,gh);
 
-  // Texto esquina inferior derecha
-  const fs = Math.round(W * 0.038);
-  const lh = Math.round(fs * 1.55);
-  const rp = Math.round(W * 0.04);
-  const bp = Math.round(H * 0.045);
-  ctx.textAlign = 'right';
-  ctx.shadowColor = 'rgba(0,0,0,0.9)';
-  ctx.shadowBlur = 8; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
-  lines.slice().reverse().forEach((line, i) => {
-    const y = H - bp - i * lh;
-    const isTitle = (i === lines.length - 1);
-    ctx.font = `${isTitle?'bold':'500'} ${isTitle?fs+2:fs}px 'DM Mono',monospace`;
-    ctx.fillStyle = 'white';
-    ctx.fillText(line, W-rp, y);
+  // Texto — esquina inferior derecha, tamaño proporcional
+  const fs=Math.max(Math.round(W*0.030),22); // mínimo 22px
+  const lh=Math.round(fs*1.6);
+  const rp=Math.round(W*0.035);
+  const bp=Math.round(H*0.04);
+
+  ctx.textAlign='right';
+  ctx.shadowColor='rgba(0,0,0,1)';
+  ctx.shadowBlur=10; ctx.shadowOffsetX=1; ctx.shadowOffsetY=1;
+
+  lines.slice().reverse().forEach((line,i)=>{
+    const y=H-bp-i*lh;
+    const isDate=(i===lines.length-1);
+    ctx.font=`${isDate?'600':'400'} ${isDate?fs+1:Math.round(fs*0.92)}px 'JetBrains Mono',monospace`;
+    ctx.fillStyle='white';
+    ctx.fillText(line,W-rp,y);
   });
-  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+  ctx.shadowColor='transparent'; ctx.shadowBlur=0;
 
-  // Mini mapa (esquina sup izq)
-  const ms = Math.round(W * 0.22);
-  const mx = Math.round(W * 0.04);
-  const my = Math.round(H * 0.025);
+  // ── MINI MAPA (esquina sup izq) ──
+  const ms=Math.round(W*0.18); // 18% del ancho
+  const mx=Math.round(W*0.035);
+  const my=Math.round(H*0.025);
   ctx.save();
   ctx.beginPath();
-  if(ctx.roundRect) ctx.roundRect(mx,my,ms,ms,10);
-  else { ctx.rect(mx,my,ms,ms); }
-  ctx.fillStyle = 'rgba(225,232,245,0.92)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-  ctx.lineWidth = 2; ctx.stroke();
+  if(ctx.roundRect) ctx.roundRect(mx,my,ms,ms,8);
+  else ctx.rect(mx,my,ms,ms);
+  ctx.fillStyle='rgba(220,228,242,0.93)'; ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.65)'; ctx.lineWidth=2; ctx.stroke();
   // Grilla
-  ctx.strokeStyle = 'rgba(150,160,180,0.4)'; ctx.lineWidth = 0.8;
+  ctx.strokeStyle='rgba(120,135,160,0.35)'; ctx.lineWidth=0.7;
   for(let g=1;g<4;g++){
-    const gx=mx+(ms/4)*g, gy=my+(ms/4)*g;
+    const gx=mx+(ms/4)*g,gy=my+(ms/4)*g;
     ctx.beginPath();ctx.moveTo(gx,my);ctx.lineTo(gx,my+ms);ctx.stroke();
     ctx.beginPath();ctx.moveTo(mx,gy);ctx.lineTo(mx+ms,gy);ctx.stroke();
   }
-  // Pin
-  const cx=mx+ms/2, cy=my+ms/2-4;
-  ctx.beginPath();ctx.arc(cx,cy-8,10,0,Math.PI*2);
-  ctx.fillStyle='#1A6BFF';ctx.fill();
-  ctx.beginPath();ctx.moveTo(cx,cy+2);ctx.lineTo(cx-6,cy-8);ctx.lineTo(cx+6,cy-8);
-  ctx.closePath();ctx.fillStyle='#1A6BFF';ctx.fill();
-  ctx.beginPath();ctx.arc(cx,cy-8,4,0,Math.PI*2);
+  // Pin azul
+  const px=mx+ms/2, py=my+ms*0.42;
+  const pr=Math.round(ms*0.16);
+  ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+  ctx.fillStyle='#2563EB';ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(px,py+pr*1.4);
+  ctx.lineTo(px-pr*.7,py+pr*.1);
+  ctx.lineTo(px+pr*.7,py+pr*.1);
+  ctx.closePath();ctx.fillStyle='#2563EB';ctx.fill();
+  // Punto blanco
+  ctx.beginPath();ctx.arc(px,py,Math.round(pr*.42),0,Math.PI*2);
   ctx.fillStyle='white';ctx.fill();
   ctx.restore();
 
-  capturedDataURL = canvas.toDataURL('image/jpeg', 0.92);
-  document.getElementById('photo-preview').src = capturedDataURL;
-  document.getElementById('photo-preview-wrap').style.display = 'block';
-  document.getElementById('viewfinder').style.display = 'none';
-  document.getElementById('shutter-row').style.display = 'none';
-  document.getElementById('btn-enviar').disabled = false;
-  if(stream) stream.getTracks().forEach(t => t.stop());
+  captured=c.toDataURL('image/jpeg',0.93);
+  document.getElementById('photo-img').src=captured;
+  document.getElementById('photo-wrap').style.display='block';
+  document.getElementById('viewfinder').style.display='none';
+  document.getElementById('shutter-row').style.display='none';
+  document.getElementById('btn-enviar').disabled=false;
+  if(stream) stream.getTracks().forEach(t=>t.stop());
 }
 
-function retakePhoto() {
-  capturedDataURL = null;
-  document.getElementById('photo-preview-wrap').style.display = 'none';
-  document.getElementById('viewfinder').style.display = 'block';
-  document.getElementById('shutter-row').style.display = 'flex';
-  document.getElementById('btn-enviar').disabled = true;
-  startCamera();
+function retakePhoto(){
+  captured=null;
+  document.getElementById('photo-wrap').style.display='none';
+  document.getElementById('viewfinder').style.display='block';
+  document.getElementById('shutter-row').style.display='flex';
+  document.getElementById('btn-enviar').disabled=true;
+  startCam();
 }
 
-// ══ NAVEGACIÓN ══
-function goStep2() {
-  const cedula = document.getElementById('cedula').value.trim();
-  const punto  = document.getElementById('punto').value;
-  if(!cedula){ alert('Ingresa tu número de cédula'); return; }
-  if(!punto){  alert('Selecciona el punto de trabajo'); return; }
-  document.getElementById('step1').style.display = 'none';
-  document.getElementById('step2').style.display = 'flex';
-  document.getElementById('s1').className = 'step done';
-  document.getElementById('s2').className = 'step active';
-  startCamera();
-  // Actualizar mapa y dirección en la vista de cámara
-  if(gpsData){ loadMapPreview(gpsData.lat, gpsData.lng); }
+// ── NAVEGACIÓN
+function goStep2(){
+  const ced=document.getElementById('cedula').value.trim();
+  const pto=document.getElementById('punto').value;
+  if(!ced){alert('Ingresa tu número de cédula');return;}
+  if(!pto){alert('Selecciona el punto de trabajo');return;}
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='flex';
+  setStepActive(2);
+  if(gpsData){loadMap(gpsData.lat,gpsData.lng);}
+  startCam();
 }
 
-function goStep3() {
-  if(!capturedDataURL){ alert('Por favor toma la foto'); return; }
-  document.getElementById('step2').style.display = 'none';
-  document.getElementById('step3').style.display = 'flex';
-  document.getElementById('s2').className = 'step done';
-  document.getElementById('s3').className = 'step active';
-  setTimeout(sendReport, 2200);
+function goStep3(){
+  if(!captured){alert('Primero toma la foto de ingreso');return;}
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='block';
+  setStepActive(3);
+  setTimeout(sendReport,2500);
 }
 
-function sendReport() {
-  const cedula = document.getElementById('cedula').value.trim();
-  const punto  = document.getElementById('punto').value;
-  const now    = new Date();
-  const horaStr = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-  const fechaStr = now.toLocaleDateString('es-CO');
-
-  // ── CONECTAR AQUÍ CON TU BACKEND ──
-  // fetch('TU_APPS_SCRIPT_URL', { method:'POST', headers:{'Content-Type':'application/json'},
-  //   body: JSON.stringify({ cedula, punto, hora: horaStr, fecha: fechaStr,
-  //     lat: gpsData?.lat, lng: gpsData?.lng, direccion: addressData, foto: capturedDataURL }) });
-
-  document.getElementById('screen-form').style.display = 'none';
-  document.getElementById('screen-success').style.display = 'flex';
-  document.getElementById('sd-cedula').textContent = cedula;
-  document.getElementById('sd-punto').textContent  = punto;
-  document.getElementById('sd-hora').textContent   = `${horaStr} · ${fechaStr}`;
-  const dir = [addressData.line1,addressData.line2,addressData.line3].filter(Boolean).join(', ');
-  document.getElementById('sd-dir').textContent = dir || (gpsData?`${gpsData.lat.toFixed(5)}, ${gpsData.lng.toFixed(5)}`:'N/D');
+function setStepActive(n){
+  for(let i=1;i<=3;i++){
+    const el=document.getElementById('s'+i);
+    el.className='step'+(i<n?' done':i===n?' active':'');
+  }
 }
 
-function resetForm() {
-  capturedDataURL = null;
-  document.getElementById('cedula').value = '';
-  document.getElementById('punto').value  = '';
-  document.getElementById('screen-success').style.display = 'none';
-  document.getElementById('screen-form').style.display = 'flex';
-  document.getElementById('step1').style.display = 'block';
-  document.getElementById('step2').style.display = 'none';
-  document.getElementById('step3').style.display = 'none';
-  document.getElementById('s1').className = 'step active';
-  document.getElementById('s2').className = 'step';
-  document.getElementById('s3').className = 'step';
-  document.getElementById('photo-preview-wrap').style.display = 'none';
-  document.getElementById('viewfinder').style.display = 'block';
-  document.getElementById('shutter-row').style.display = 'flex';
-  document.getElementById('btn-enviar').disabled = true;
-  if(stream) stream.getTracks().forEach(t => t.stop());
+function sendReport(){
+  const ced=document.getElementById('cedula').value.trim();
+  const pto=document.getElementById('punto').value;
+  const now=new Date();
+  const h=now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+  const f=now.toLocaleDateString('es-CO');
+
+  /* ══ AQUÍ CONECTAS CON TU APPS SCRIPT ══
+  fetch('TU_URL_APPS_SCRIPT_AQUI',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      cedula:ced, punto:pto, hora:h, fecha:f,
+      lat:gpsData?.lat, lng:gpsData?.lng,
+      direccion:[addr.l1,addr.l2,addr.l3].join(', '),
+      foto:captured
+    })
+  });
+  */
+
+  document.getElementById('screen-form').style.display='none';
+  document.getElementById('screen-success').style.display='flex';
+  document.getElementById('sd-cedula').textContent=ced;
+  document.getElementById('sd-punto').textContent=pto;
+  document.getElementById('sd-hora').textContent=`${h} · ${f}`;
+  document.getElementById('sd-dir').textContent=[addr.l1,addr.l2,addr.l3].filter(Boolean).join(', ')
+    ||(gpsData?`${gpsData.lat.toFixed(5)}°N, ${Math.abs(gpsData.lng).toFixed(5)}°W`:'No disponible');
+}
+
+function resetAll(){
+  captured=null;
+  document.getElementById('cedula').value='';
+  document.getElementById('punto').value='';
+  document.getElementById('screen-success').style.display='none';
+  document.getElementById('screen-form').style.display='flex';
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='none';
+  document.getElementById('photo-wrap').style.display='none';
+  document.getElementById('viewfinder').style.display='block';
+  document.getElementById('shutter-row').style.display='flex';
+  document.getElementById('btn-enviar').disabled=true;
+  setStepActive(1);
+  if(stream) stream.getTracks().forEach(t=>t.stop());
 }
 </script>
 </body>
