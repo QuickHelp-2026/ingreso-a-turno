@@ -512,7 +512,34 @@ canvas{display:none;}
   <div class="success-wrap">
     <div class="check-ring">✅</div>
     <h2>Ingreso registrado</h2>
-    <p>Reporte enviado al coordinador y regente. Queda registrado en la malla de control.</p>
+    <p>Reporte enviado al coordinador y regente.</p>
+
+    <!-- FOTO CON SELLO — visible para el mensajero -->
+    <div id="foto-success-wrap" style="width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--border2);display:none;flex-direction:column;gap:0;">
+      <img id="foto-preview-success" src="" alt="Foto de ingreso"
+           style="display:none;width:100%;object-fit:cover;border-radius:14px 14px 0 0;" />
+      <!-- Botones sobre la foto -->
+      <div id="foto-actions" style="display:none;gap:0;">
+        <button id="btn-descargar" style="
+          flex:1;padding:13px 8px;
+          background:var(--surface2);border:none;border-top:1px solid var(--border2);
+          color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;
+          cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
+          border-right:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar
+        </button>
+        <button id="btn-compartir" style="
+          flex:1;padding:13px 8px;
+          background:var(--surface2);border:none;border-top:1px solid var(--border2);
+          color:#25D366;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;
+          cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartir
+        </button>
+      </div>
+    </div>
+
     <div class="info-card">
       <div class="info-row">
         <span class="info-label">Cédula</span>
@@ -536,7 +563,7 @@ canvas{display:none;}
       <div class="divider"></div>
       <div class="info-row">
         <span class="info-label">Estado</span>
-        <span class="badge-ok">● En horario</span>
+        <span class="badge-ok">● Registrado</span>
       </div>
     </div>
     <button class="btn btn-ghost" onclick="resetAll()" style="width:100%;">+ Nuevo registro</button>
@@ -832,7 +859,7 @@ async function sendReport(){
   const h   = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   const f   = now.toLocaleDateString('es-CO');
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQxcOgKUhbUB5mzPK9l5rEEzbBpmE4D5PRK1gszfmWk_gJXtF1JpcyFekEPtyCQBM9/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlcZrug9MKZ5WDR-Z32Q-EqjqID8jceQdy8MZIQRLJl98xaBHR0QxeJCP7U-5Y5e4e/exec';
 
   const payload = {
     cedula     : ced,
@@ -872,6 +899,41 @@ function mostrarExito(ced, pto, h, f){
   document.getElementById('sd-hora').textContent   = h + ' · ' + f;
   document.getElementById('sd-dir').textContent    = [addr.l1,addr.l2,addr.l3].filter(Boolean).join(', ')
     || (gpsData ? gpsData.lat.toFixed(5) + '°N, ' + Math.abs(gpsData.lng).toFixed(5) + '°W' : 'No disponible');
+
+  // Mostrar foto capturada en pantalla de éxito
+  if (captured) {
+    document.getElementById('foto-preview-success').src = captured;
+    document.getElementById('foto-preview-success').style.display = 'block';
+    document.getElementById('foto-success-wrap').style.display = 'flex';
+    // Botón descargar
+    document.getElementById('btn-descargar').onclick = () => {
+      const a = document.createElement('a');
+      a.href = captured;
+      a.download = 'Ingreso_' + ced + '_' + f.replace(/\//g,'-') + '.jpg';
+      a.click();
+    };
+    // Botón compartir (Web Share API — funciona en móvil)
+    document.getElementById('btn-compartir').onclick = async () => {
+      try {
+        const res  = await fetch(captured);
+        const blob = await res.blob();
+        const file = new File([blob], 'Ingreso_CAFAM_' + ced + '.jpg', { type:'image/jpeg' });
+        if (navigator.share && navigator.canShare({ files:[file] })) {
+          await navigator.share({
+            title : 'Ingreso CAFAM · ' + ced,
+            text  : 'Registro de ingreso ' + h + ' · ' + pto,
+            files : [file]
+          });
+        } else {
+          // Fallback: abrir imagen en nueva pestaña
+          window.open(captured, '_blank');
+        }
+      } catch(e) {
+        window.open(captured, '_blank');
+      }
+    };
+    document.getElementById('foto-actions').style.display = 'flex';
+  }
 }
 
 function resetAll(){
