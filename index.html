@@ -634,21 +634,28 @@ function hide(id){document.getElementById(id).style.display='none';}
 
 // ── GEOCODING (dirección completa)
 function reverseGeocode(lat,lng){
-  fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=es`)
+  // zoom=18 da máximo detalle incluido número de casa
+  fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=es&zoom=18&addressdetails=1`)
     .then(r=>r.json()).then(d=>{
-      const a=d.address||{};
-      const road=(a.road||a.pedestrian||a.suburb||'').trim();
-      const num=a.house_number||'';
-      const barrio=a.suburb||a.neighbourhood||a.quarter||'';
-      const ciudad=a.city||a.town||a.municipality||'Bogotá';
-      addr.l1=(road+(num?' '+num:'')).trim()||`${lat.toFixed(5)}°N`;
-      addr.l2=barrio;
-      addr.l3=ciudad;
+      const a = d.address || {};
+      // Número de casa — Nominatim lo devuelve en house_number
+      const num   = (a.house_number || '').trim();
+      const road  = (a.road || a.pedestrian || a.footway || a.path || '').trim();
+      // Construir línea 1: "Calle 73B 94-60" o usar display_name si no hay road
+      let l1 = road ? (road + (num ? ' ' + num : '')) : (d.display_name || '').split(',')[0];
+      addr.l1 = l1.trim() || (lat.toFixed(5)+'°N');
+      addr.l2 = (a.suburb || a.neighbourhood || a.quarter || a.city_district || '').trim();
+      addr.l3 = (a.city   || a.town || a.municipality || 'Bogotá').trim();
       setStamp();
-      const gl=document.getElementById('gps-label2');
-      if(gl) gl.textContent=truncate(addr.l1,22);
+      const gl = document.getElementById('gps-label2');
+      if(gl) gl.textContent = truncate(addr.l1, 22);
     })
-    .catch(()=>{ addr.l1=`${lat.toFixed(5)}°N`; addr.l2=`${Math.abs(lng).toFixed(5)}°W`; setStamp(); });
+    .catch(()=>{
+      addr.l1 = lat.toFixed(5)+'°N';
+      addr.l2 = Math.abs(lng).toFixed(5)+'°W';
+      addr.l3 = '';
+      setStamp();
+    });
 }
 function setStamp(){
   const s=['live-a1','live-a2','live-a3'];
@@ -825,7 +832,7 @@ async function sendReport(){
   const h   = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   const f   = now.toLocaleDateString('es-CO');
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcK5bsGhSbYrp-M-1zVNl2vO_No5ehfW_EHrX1r1tPfKgx51HV5sZ7ATCrXPo8pVZD/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQxcOgKUhbUB5mzPK9l5rEEzbBpmE4D5PRK1gszfmWk_gJXtF1JpcyFekEPtyCQBM9/exec';
 
   const payload = {
     cedula     : ced,
