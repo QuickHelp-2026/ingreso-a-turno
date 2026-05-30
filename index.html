@@ -825,41 +825,35 @@ async function sendReport(){
   const h   = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   const f   = now.toLocaleDateString('es-CO');
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoqGZOVu-GE085ejOZCu_HeuxvPcYnwQKWKIMZ79I_Pn0tZkZzgg4m5uF_xc2N5mP0/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcK5bsGhSbYrp-M-1zVNl2vO_No5ehfW_EHrX1r1tPfKgx51HV5sZ7ATCrXPo8pVZD/exec';
 
   const payload = {
-    cedula    : ced,
-    punto     : pto,
-    hora      : h,
-    fecha     : f,
-    lat       : gpsData?.lat  ?? null,
-    lng       : gpsData?.lng  ?? null,
-    direccion : [addr.l1, addr.l2, addr.l3].filter(Boolean).join(', '),
-    foto      : captured
+    cedula     : ced,
+    punto      : pto,
+    hora       : h,
+    fecha      : f,
+    lat        : gpsData?.lat  ?? null,
+    lng        : gpsData?.lng  ?? null,
+    direccion  : [addr.l1, addr.l2, addr.l3].filter(Boolean).join(', '),
+    fotoBase64 : captured
   };
 
   try {
-    // Apps Script requiere no-cors para evitar el error de redirección CORS
     await fetch(APPS_SCRIPT_URL, {
-      method      : 'POST',
-      mode        : 'no-cors',
-      redirect    : 'follow',
-      headers     : { 'Content-Type': 'text/plain' },
-      body        : JSON.stringify(payload)
+      method  : 'POST',
+      mode    : 'no-cors',
+      headers : { 'Content-Type': 'text/plain' },
+      body    : JSON.stringify(payload)
     });
-    // no-cors devuelve respuesta opaca — si no lanzó excepción, llegó OK
     mostrarExito(ced, pto, h, f);
   } catch(err) {
-    // Mostrar error real al usuario en lugar de pantalla de éxito falsa
     document.getElementById('step3').innerHTML =
-      `<div style="text-align:center;padding:20px 0;">
-        <p style="font-size:22px;margin-bottom:12px;">⚠️</p>
-        <p style="font-size:14px;font-weight:500;color:#EF4444;margin-bottom:8px;">Error al enviar el registro</p>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:20px;">${err.message}</p>
-        <button onclick="resetAll()" style="padding:12px 24px;background:var(--blue);border:none;border-radius:10px;color:white;font-size:14px;font-weight:600;cursor:pointer;">
-          Intentar de nuevo
-        </button>
-      </div>`;
+      '<div style="text-align:center;padding:20px 0;">'
+      + '<p style="font-size:22px;margin-bottom:12px;">⚠️</p>'
+      + '<p style="font-size:14px;font-weight:500;color:#EF4444;margin-bottom:8px;">Error al enviar</p>'
+      + '<p style="font-size:12px;color:#8B96B0;margin-bottom:20px;">' + err.message + '</p>'
+      + '<button onclick="resetAll()" style="padding:12px 24px;background:#1A6BFF;border:none;border-radius:10px;color:white;font-size:14px;font-weight:600;cursor:pointer;">Intentar de nuevo</button>'
+      + '</div>';
   }
 }
 
@@ -868,9 +862,9 @@ function mostrarExito(ced, pto, h, f){
   document.getElementById('screen-success').style.display='flex';
   document.getElementById('sd-cedula').textContent = ced;
   document.getElementById('sd-punto').textContent  = pto;
-  document.getElementById('sd-hora').textContent   = `${h} · ${f}`;
+  document.getElementById('sd-hora').textContent   = h + ' · ' + f;
   document.getElementById('sd-dir').textContent    = [addr.l1,addr.l2,addr.l3].filter(Boolean).join(', ')
-    || (gpsData ? `${gpsData.lat.toFixed(5)}°N, ${Math.abs(gpsData.lng).toFixed(5)}°W` : 'No disponible');
+    || (gpsData ? gpsData.lat.toFixed(5) + '°N, ' + Math.abs(gpsData.lng).toFixed(5) + '°W' : 'No disponible');
 }
 
 function resetAll(){
